@@ -16,13 +16,12 @@ CHECK_ALTERNATE_check401="check41"
 check41(){
   # "Ensure no security groups allow ingress from 0.0.0.0/0 to port 22 (Scored)"
   for regx in $REGIONS; do
-    SG_LIST=$($AWSCLI ec2 describe-security-groups --query 'SecurityGroups[?length(IpPermissions[?((FromPort==null && ToPort==null) || (FromPort<=`22` && ToPort>=`22`)) && contains(IpRanges[].CidrIp, `0.0.0.0/0`)]) > `0`].{VpcId:VpcId,GroupId:GroupId}' $PROFILE_OPT --region $regx --output text)
+    SG_LIST=$($AWSCLI ec2 describe-security-groups --query 'SecurityGroups[?length(IpPermissions[?((FromPort==null && ToPort==null) || (FromPort<=`22` && ToPort>=`22`)) && contains(IpRanges[].CidrIp, `0.0.0.0/0`)]) > `0`].{VpcId:VpcId,GroupId:GroupId}' $PROFILE_OPT --region $regx --output text | xargs -n 2 -I @ echo "@" | tr ' ' '_')
     if [[ $SG_LIST ]];then
-      echo "-----"
-      echo $SG_LIST
-      echo "-----"
-      for SG in $SG_LIST;do
-        textFail "Found Security Group: $SG open to 0.0.0.0/0 in Region $regx" "$regx"
+      for SG_VPC in $SG_LIST;do
+        SG=$(echo $SG_VPC | cut -d'_' -f1)
+        VPC=$(echo $SG_VPC | cut -d'_' -f2)
+        textFail "Found Security Group: $SG in $VPC open to 0.0.0.0/0 in Region $regx" "$regx"
       done
     else
       textPass "No Security Groups found in $regx with port 22 TCP open to 0.0.0.0/0" "$regx"
