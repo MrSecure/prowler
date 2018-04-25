@@ -38,6 +38,7 @@ getWhoami(){
       exit $EXITCODE
     fi
     CALLER_ARN=$(echo $CALLER_ARN_RAW | tr -d '"')
+    textTitle "0.0" "Show report generation info" "NOT_SCORED" "SUPPORT"
     textInfo "ARN: $CALLER_ARN  TIMESTAMP: $SCRIPT_START_TIME"    
   else
     echo ""
