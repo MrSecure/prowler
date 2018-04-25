@@ -19,7 +19,7 @@ if [[ $MODE != "mono" && $MODE != "text" && $MODE != "csv" && $MODE != "json" ]]
   exit $EXITCODE
 fi
 
-if [[ "$MODE" == "mono" || "$MODE" == "csv" ]]; then
+if [[ $MODE == "mono" || $MODE == "csv" || $MODE == "json" ]]; then
   MONOCHROME=1
 fi
 
