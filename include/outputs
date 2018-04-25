@@ -21,17 +21,9 @@ textPass(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}PASS${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    # jq -M -c --arg PROFILE "$PROFILE" \
-    #  --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
-    #  --arg TITLE_TEXT "$TITLE_TEXT" \
-    #  --arg WARNING "$1" \
-    #  --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-    #  -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Pass", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
     TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-    printf '{"Profile": "%s", "Account Number": "%s", "Control": "%s", "Result":"Pass", "Warning": "%s", "Timestamp": "%s"}\n' \
+    printf '{"Profile":"%s", "Account Number":"%s", "Control":"%s", "Result":"Pass", "Warning":"%s", "Timestamp":"%s"}\n' \
                    "$PROFILE"  "$ACCOUNT_NUM" "$TITLE_TEXT" "$1" "$TIMESTAMP"
-     # printf '{"hostname":"%s","distro":"%s","uptime":"%s"}\n' "$hostname" "$distro" "$uptime"
-
   else
     echo "      $OK PASS!$NORMAL $1"
   fi
@@ -46,12 +38,9 @@ textInfo(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}INFO${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    jq -M -c --arg PROFILE "$PROFILE" \
-     --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
-     --arg TITLE_TEXT "$TITLE_TEXT" \
-     --arg WARNING "$1" \
-     --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Info", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
+    TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    printf '{"Profile":"%s", "Account Number":"%s", "Control":"%s", "Result":"Info", "Warning":"%s", "Timestamp":"%s"}\n' \
+                   "$PROFILE"  "$ACCOUNT_NUM" "$TITLE_TEXT" "$1" "$TIMESTAMP"
   else
     echo "      $NOTICE INFO! $1 $NORMAL"
   fi
@@ -67,12 +56,9 @@ textFail(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}FAIL${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    jq -M -c --arg PROFILE "$PROFILE" \
-     --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
-     --arg TITLE_TEXT "$TITLE_TEXT" \
-     --arg WARNING "$1" \
-     --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Warning", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
+    TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    printf '{"Profile":"%s", "Account Number":"%s", "Control":"%s", "Result":"Warning", "Warning":"%s", "Timestamp":"%s"}\n' \
+                   "$PROFILE"  "$ACCOUNT_NUM" "$TITLE_TEXT" "$1" "$TIMESTAMP"
   else
     echo "      $BAD FAIL! $1 $NORMAL"
   fi
