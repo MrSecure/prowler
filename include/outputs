@@ -21,7 +21,7 @@ textPass(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}PASS${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    jq -c --arg PROFILE "$PROFILE" \
+    jq -M -c --arg PROFILE "$PROFILE" \
      --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
      --arg TITLE_TEXT "$TITLE_TEXT" \
      --arg WARNING "$1" \
@@ -41,7 +41,7 @@ textInfo(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}INFO${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    jq -c --arg PROFILE "$PROFILE" \
+    jq -M -c --arg PROFILE "$PROFILE" \
      --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
      --arg TITLE_TEXT "$TITLE_TEXT" \
      --arg WARNING "$1" \
@@ -62,7 +62,7 @@ textFail(){
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}FAIL${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
   elif [[ "$MODE" == "json" ]]; then
-    jq -c --arg PROFILE "$PROFILE" \
+    jq -M -c --arg PROFILE "$PROFILE" \
      --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
      --arg TITLE_TEXT "$TITLE_TEXT" \
      --arg WARNING "$1" \
@@ -105,6 +105,8 @@ textTitle(){
 
   if [[ "$MODE" == "csv" ]]; then
       >&2 echo "$TITLE_ID $TITLE_TEXT"
+  elif [[ "$MODE" == "json" ]]; then
+    echo ""
   else
     if [[ "$ITEM_SCORED" == "Scored" ]]; then
       echo -e "\n$BLUE $TITLE_ID $NORMAL $TITLE_TEXT"
