@@ -20,6 +20,13 @@ textPass(){
       REPREGION=$REGION
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}PASS${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
+  elif [[ "$MODE" == "json" ]]; then
+    jq -c --arg PROFILE "$PROFILE" \
+     --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
+     --arg TITLE_TEXT "$TITLE_TEXT" \
+     --arg WARNING "$1" \
+     --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Pass", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
   else
     echo "      $OK PASS!$NORMAL $1"
   fi
@@ -33,6 +40,13 @@ textInfo(){
       REPREGION=$REGION
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}INFO${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
+  elif [[ "$MODE" == "json" ]]; then
+    jq -c --arg PROFILE "$PROFILE" \
+     --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
+     --arg TITLE_TEXT "$TITLE_TEXT" \
+     --arg WARNING "$1" \
+     --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Info", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
   else
     echo "      $NOTICE INFO! $1 $NORMAL"
   fi
@@ -47,13 +61,13 @@ textFail(){
       REPREGION=$REGION
     fi
     echo "$PROFILE${SEP}$ACCOUNT_NUM${SEP}$REPREGION${SEP}$TITLE_ID${SEP}FAIL${SEP}$ITEM_SCORED${SEP}$ITEM_LEVEL${SEP}$TITLE_TEXT${SEP}$1"
-  elif [[ "$MODE" == "json"]]; then
+  elif [[ "$MODE" == "json" ]]; then
     jq -c --arg PROFILE "$PROFILE" \
      --arg ACCOUNT_NUM "$ACCOUNT_NUM" \
      --arg TITLE_TEXT "$TITLE_TEXT" \
      --arg WARNING "$1" \
      --arg TIMESTAMP $(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
+     -n '{"Profile": $PROFILE, "Account Number": $ACCOUNT_NUM, "Control": $TITLE_TEXT, "Result":"Warning", "Warning": $WARNING, "Timestamp": $TIMESTAMP}'
   else
     echo "      $BAD FAIL! $1 $NORMAL"
   fi
