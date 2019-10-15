@@ -187,7 +187,7 @@ for member in $(grep -E '^\[' "${AWS_TARGETS_CREDENTIALS_FILE}" | tr -d '][') ; 
   ACCOUNT_NUM=$(echo "$member" | cut -d'_' -f2)
 
   # shellcheck disable=SC2086
-  ${PARALLEL_START} "${PROWLER} -p ${member} -n -M csv -g ${CHECKGROUP} 2> ${OUTLOGS}/${STAMP}-${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP}.log  > ${OUTDATA}/${STAMP}-${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP}.csv ; echo \"${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP} finished\" " ${PARALLEL_START_SUFFIX}
+  ${PARALLEL_START} "${PROWLER} -p ${member} -k -n -M csv -g ${CHECKGROUP} 2> ${OUTLOGS}/${STAMP}-${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP}.log  > ${OUTDATA}/${STAMP}-${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP}.csv ; echo \"${ORG_ID}-${ACCOUNT_NUM}-prowler-${CHECKGROUP} finished\" " ${PARALLEL_START_SUFFIX}
 done
 
 echo -n "waiting for parallel threads to complete - " ; date
