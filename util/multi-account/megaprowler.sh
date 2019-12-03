@@ -92,7 +92,7 @@ fi
 
 if [[ -x $(command -v parallel) ]]; then
   # Note: the "standard" codebuild container includes parallel
-  PARALLEL_JOBS="200%"
+  PARALLEL_JOBS="400%"
   echo "Using GNU sem/parallel, with --jobs ${PARALLEL_JOBS}"
   parallel --citation > /dev/null 2> /dev/null
   PARALLEL_START="parallel --semaphore --fg --id p_${STAMP} --jobs ${PARALLEL_JOBS} --env AWS_SHARED_CREDENTIALS_FILE"
