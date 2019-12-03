@@ -275,17 +275,17 @@ Resources:
             pre_build:
               commands:
                 - env | grep PROWL_
-                - export OUTBASE=$(date -u +"out/diagnostics/%Y/%m/%d")
+                - export OUTDIAG=$(date -u +"out/diagnostics/%Y/%m/%d")
                 - export STAMP=$(date -u +"%Y%m%dT%H%M%SZ")
-                - mkdir -p $OUTBASE || true
+                - mkdir -p $OUTDIAG || true
                 - prowler/prowler -V
-                - aws sts get-caller-identity > ${OUTBASE}/${STAMP}-caller-id.json
+                - aws sts get-caller-identity > ${OUTDIAG}/${STAMP}-caller-id.json
             build:
               commands:
                 #### Run Prowler against this account, but don't fail the build
                 # - export PROWLER_ACCOUNT_ID=$(aws sts get-caller-identity | jq -r '.Account')
-                # - /bin/bash prowler/prowler -g cislevel1 -M csv -n -k > ${OUTBASE}/${STAMP}.${PROWLER_ACCOUNT_ID}.prowler.cislevel1.csv || /bin/true
-                # - /bin/bash prowler/prowler -g forensics-ready -M csv -n -k > ${OUTBASE}/${STAMP}.${PROWLER_ACCOUNT_ID}.prowler.forensics-ready.csv || /bin/true
+                # - /bin/bash prowler/prowler -g cislevel1 -M csv -n -k > ${OUTDIAG}/${STAMP}.${PROWLER_ACCOUNT_ID}.prowler.cislevel1.csv || /bin/true
+                # - /bin/bash prowler/prowler -g forensics-ready -M csv -n -k > ${OUTDIAG}/${STAMP}.${PROWLER_ACCOUNT_ID}.prowler.forensics-ready.csv || /bin/true
                 #### Run Prowler targeting all accounts in the configured organizations
                 - test -f prowler/util/multi-account/config
                 - /bin/bash prowler/util/multi-account/megaprowler.sh out
@@ -295,6 +295,7 @@ Resources:
               commands:
                 - echo "attempting to collect any prowler credential reports ..."
                 - find /tmp/ -name prowler\* | xargs -I % cp % ${OUTDIAG} || true
+                - tar -czvf ${OUTDIAG}/${STAMP}-credential-reports.tgz /tmp/prowler.cred_report* || true
           artifacts:
             files:
               - '**/*'

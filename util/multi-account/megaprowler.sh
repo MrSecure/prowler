@@ -83,12 +83,19 @@ OUTDATA="${OUTBASE}/data/${DAYPATH}"
 OUTLOGS="${OUTBASE}/logs/${DAYPATH}"
 mkdir -p "${OUTDATA}" "${OUTLOGS}"
 
+  echo "CPU Info:"
+if [[ -x $(command lscpu) ]]; then
+  lscpu
+else
+  cat /proc/cpu || echo "Sorry ... not able to gather CPU info"
+fi
 
 if [[ -x $(command -v parallel) ]]; then
   # Note: the "standard" codebuild container includes parallel
-  echo "Using GNU sem/parallel, with NCPU+4 jobs"
+  PARALLEL_JOBS="200%"
+  echo "Using GNU sem/parallel, with --jobs ${PARALLEL_JOBS}"
   parallel --citation > /dev/null 2> /dev/null
-  PARALLEL_START="parallel --semaphore --fg --id p_${STAMP} --jobs +4 --env AWS_SHARED_CREDENTIALS_FILE"
+  PARALLEL_START="parallel --semaphore --fg --id p_${STAMP} --jobs ${PARALLEL_JOBS} --env AWS_SHARED_CREDENTIALS_FILE"
   PARALLEL_START_SUFFIX=''
   PARALLEL_END="parallel --semaphore --wait --id p_${STAMP}"
 else
