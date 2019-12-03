@@ -223,6 +223,9 @@ Resources:
       Environment:
         Type: "LINUX_CONTAINER"
         ComputeType: "BUILD_GENERAL1_MEDIUM"
+        # Type: "ARM_CONTAINER"
+        # ComputeType: "BUILD_GENERAL1_LARGE"
+        # Image: "aws/codebuild/standard:2.0
         PrivilegedMode: False
         Image: "aws/codebuild/standard:2.0-1.12.0"
         ImagePullCredentialsType: "CODEBUILD"
@@ -294,7 +297,7 @@ Resources:
             post_build:
               commands:
                 - echo "attempting to collect any prowler credential reports ..."
-                - find /tmp/ -name prowler\* | xargs -I % cp % ${OUTDIAG} || true
+                # - find /tmp/ -name prowler\* | xargs -I % cp % ${OUTDIAG} || true
                 - tar -czvf ${OUTDIAG}/${STAMP}-credential-reports.tgz /tmp/prowler.cred_report* || true
           artifacts:
             files:

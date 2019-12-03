@@ -189,7 +189,7 @@ export AWS_SHARED_CREDENTIALS_FILE=${AWS_TARGETS_CREDENTIALS_FILE}
 ## visit each target account
 NUM_ACCOUNTS=$(grep -cE '^\[' "${AWS_TARGETS_CREDENTIALS_FILE}")
 echo "Launching ${CHECKGROUP} audit of ${NUM_ACCOUNTS} accounts"
-for member in $(grep -E '^\[' "${AWS_TARGETS_CREDENTIALS_FILE}" | tr -d '][') ; do
+for member in $(grep -E '^\[' "${AWS_TARGETS_CREDENTIALS_FILE}" | tr -d '][' | sort -R) ; do
   ORG_ID=$(echo "$member" | cut -d'_' -f1)
   ACCOUNT_NUM=$(echo "$member" | cut -d'_' -f2)
 
