@@ -73,6 +73,12 @@ else
   exit 3
 fi
 
+echo "CPU Info:"
+if [[ -x $(command lscpu) ]]; then
+  lscpu
+else
+  cat /proc/cpu || echo "Sorry ... not able to gather CPU info"
+fi
 
 ## Preflight checks complete
 
@@ -82,13 +88,6 @@ STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 OUTDATA="${OUTBASE}/data/${DAYPATH}"
 OUTLOGS="${OUTBASE}/logs/${DAYPATH}"
 mkdir -p "${OUTDATA}" "${OUTLOGS}"
-
-  echo "CPU Info:"
-if [[ -x $(command lscpu) ]]; then
-  lscpu
-else
-  cat /proc/cpu || echo "Sorry ... not able to gather CPU info"
-fi
 
 if [[ -x $(command -v parallel) ]]; then
   # Note: the "standard" codebuild container includes parallel
