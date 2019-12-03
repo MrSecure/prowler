@@ -95,7 +95,7 @@ if [[ -x $(command -v parallel) ]]; then
   PARALLEL_JOBS="400%"
   echo "Using GNU sem/parallel, with --jobs ${PARALLEL_JOBS}"
   parallel --citation > /dev/null 2> /dev/null
-  PARALLEL_START="parallel --semaphore --fg --id p_${STAMP} --jobs ${PARALLEL_JOBS} --env AWS_SHARED_CREDENTIALS_FILE"
+  PARALLEL_START="parallel --semaphore --fg --id p_${STAMP} --jobs ${PARALLEL_JOBS} --joblog ${OUTLOGS}/job.log --env AWS_SHARED_CREDENTIALS_FILE"
   PARALLEL_START_SUFFIX=''
   PARALLEL_END="parallel --semaphore --wait --id p_${STAMP}"
 else
