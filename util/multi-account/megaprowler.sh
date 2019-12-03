@@ -74,7 +74,7 @@ else
 fi
 
 echo "CPU Info:"
-if [[ -x $(command lscpu) ]]; then
+if [[ -x $(command -v lscpu) ]]; then
   lscpu
 else
   cat /proc/cpu || echo "Sorry ... not able to gather CPU info"
