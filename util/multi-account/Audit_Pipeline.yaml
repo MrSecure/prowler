@@ -16,6 +16,8 @@ Metadata:
         Parameters:
           - pProwlerCheckGroup
           - pAuditEveryXHours
+          - pResultsBucket
+          - pResultsPath
       - Label:
           default: "Advanced"
         Parameters:
@@ -34,6 +36,10 @@ Metadata:
         default: "Prowler Check Group"
       pAuditEveryXHours:
         default: "Perform Audit every X hours"
+      pResultsBucket:
+        default: "S3 Bucket where results will be stored (leave empty to autocreate)"
+      pResultsPath:
+        default: "Path within the bucket where prowler results will be delivered"
       pTimeoutMinutes:
         default: "Permit Audit to run for X minutes"
       pAuditRolePathName:
@@ -109,14 +115,23 @@ Parameters:
     Default: '--branch master'
     MinLength: 0
   ##### TODO
-  # pResultsBucket: # if specified, use an existing bucket for the data
+  pResultsBucket: # if specified, use an existing bucket for the data
+    Type: String
+    Default: ''
+  pResultsPath:
+    Type: String
+    Default: 'prowler/'
+
   # pEnableAthena:
   #   Default: false
   #   Type: Boolean
   #   Description: Set to true to enable creation of Athena/QuickSight resources
 
 #### TODO
-# Conditions:
+Conditions:
+  cCreateBucket: !Equals
+    - !Ref pResultsBucket
+    - ''
 #   cUseAthena: False
 
 Resources:
@@ -124,6 +139,7 @@ Resources:
   # S3 Bucket for Results, Config
   ProwlerResults:
     Type: "AWS::S3::Bucket"
+    # Condition: cCreateBucket
     Properties:
       # BucketName: !Sub "audit-results-${AWS::AccountId}"
       Tags:
@@ -232,8 +248,8 @@ Resources:
       Artifacts: # s3://stack-prowlerresults-randomness/prowler/results/...
         Name: "results"
         Type: "S3"
-        Location: !Ref ProwlerResults
-        Path: "prowler"
+        Location: !If [ cCreateBucket, !Ref ProwlerResults, !Ref pResultsBucket ]
+        Path:     !Ref pResultsPath
         NamespaceType: NONE
         Packaging: NONE
         OverrideArtifactName: False
@@ -412,4 +428,7 @@ Resources:
 Outputs:
   ResultsBucket:
     Description: S3 Bucket with Prowler Results, Logs, Configs
-    Value: !Ref ProwlerResults
+    Value: !If
+      - cCreateBucket
+      - !Ref ProwlerResults
+      - !Ref pResultsBucket
